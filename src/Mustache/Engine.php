@@ -687,6 +687,21 @@ class Mustache_Engine
             }
 
         }
+        
+        if(!is_writeable($dirName)) {
+            if(!@chmod($dirName, 0777)) {
+                throw new Mustache_Exception_RuntimeException(sprintf('Failed to make cache directory writeable (chmod)"%s".', $dirName));
+            }
+            
+            if(is_writeable($dirName)) {
+                $this->log(
+                    Mustache_Logger::INFO,
+                    'Mustache template cache directory is now writeable: "{dirName}"',
+                    array('dirName' => $dirName)
+                );
+            }
+        }
+        
 
         $this->log(
             Mustache_Logger::DEBUG,
